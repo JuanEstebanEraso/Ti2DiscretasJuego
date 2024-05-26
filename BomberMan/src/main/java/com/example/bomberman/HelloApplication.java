@@ -25,7 +25,7 @@ public class HelloApplication extends Application {
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root, width, height);
             Stage stage = new Stage();
-            stage.setTitle(" BomberMan!");
+            stage.setTitle(" I drive!");
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {
