@@ -14,7 +14,7 @@ public class ventanaPortadaController {
     @FXML
     public void onStartGameButtonClick(ActionEvent event) {
         HelloApplication.hideWindow((Stage) PortadaImage.getScene().getWindow());
-        HelloApplication.showWindow("VentanaJuego.fxml", 1200, 800);
+        HelloApplication.showWindow("VentanaJuego.fxml", 600, 400);
 
     }
 
