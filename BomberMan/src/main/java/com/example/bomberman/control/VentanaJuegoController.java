@@ -24,20 +24,20 @@ public class VentanaJuegoController {
     private Enemy enemy;
     private int[][] distances;
     private int[][] next;
-    private Image backgroundImage; // Imagen de fondo
-    private Image playerImage; // Imagen del jugador
-    private Image enemyImage; // Imagen del enemigo
+    private Image backgroundImage;
+    private Image playerImage;
+    private Image enemyImage;
     private int playerEnergy = 100;
     private Vertex<Integer> victoryVertex;
 
     @FXML
     public void initialize() {
         createGraph();
-        characterPosition = graph.getVertexOfData(1); // Colocar al personaje en el vértice 1 al inicio
-        enemy = new Enemy(graph.getVertexOfData(20)); // Colocar al enemigo en el vértice 20 al inicio
-        victoryVertex = graph.getVertexOfData(50); // Definir el vértice de victoria
-        loadBackgroundImage(); // Cargar la imagen de fondo
-        loadPlayerImage(); // Cargar la imagen del jugador
+        characterPosition = graph.getVertexOfData(1); // Colocar al personaje en el vértice 1
+        enemy = new Enemy(graph.getVertexOfData(20)); // enemigo en el vértice 20
+        victoryVertex = graph.getVertexOfData(50); //  vértice de victoria
+        loadBackgroundImage();
+        loadPlayerImage();
         loadEnemyImage();
         calculateShortestPaths();
         drawGraph();
@@ -55,7 +55,7 @@ public class VentanaJuegoController {
 
         for (int i = 1; i <= 50; i++) {
             if (i + 1 <= 50 && i % 5 != 0) {
-                int weight = random.nextInt(10) + 1; // Peso aleatorio entre 1 y 10
+                int weight = random.nextInt(10) + 1;
                 graph.addEdge(i, i + 1, weight);
                 graph.addEdge(i + 1, i, weight);
             }
@@ -103,7 +103,6 @@ public class VentanaJuegoController {
         distances = new int[size + 1][size + 1];
         next = new int[size + 1][size + 1];
 
-        // Inicializar matrices
         for (int i = 1; i <= size; i++) {
             for (int j = 1; j <= size; j++) {
                 if (i == j) {
@@ -115,7 +114,7 @@ public class VentanaJuegoController {
             }
         }
 
-        // Configurar distancias y siguientes
+
         for (Vertex<Integer> vertex : graph.getVertices()) {
             for (Edge<Integer> edge : graph.getEdges(vertex)) {
                 int u = vertex.getData();
@@ -141,7 +140,6 @@ public class VentanaJuegoController {
     private void drawGraph() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        // Dibujar imagen de fondo si está disponible
         if (backgroundImage != null) {
             gc.drawImage(backgroundImage, 0, 0, canvas.getWidth(), canvas.getHeight());
         } else {
@@ -191,7 +189,7 @@ public class VentanaJuegoController {
         int x = col * 100 + 50;
         int y = row * 100 + 50;
 
-        gc.drawImage(playerImage, x, y, 60, 60); // Dibujar la imagen del jugador
+        gc.drawImage(playerImage, x, y, 60, 60);
     }
 
     private void drawEnemy(GraphicsContext gc) {
@@ -200,7 +198,7 @@ public class VentanaJuegoController {
         int x = col * 100 + 40;
         int y = row * 100 + 40;
 
-        gc.drawImage(enemyImage, x, y, 75, 60); // Dibujar la imagen del enemigo
+        gc.drawImage(enemyImage, x, y, 75, 60);
     }
 
     private void handleCanvasClick(MouseEvent event) {
@@ -235,7 +233,7 @@ public class VentanaJuegoController {
                             break;
                         } else {
                             System.out.println("¡No tienes suficiente energía para moverte por este camino!");
-                            return; // El jugador no puede moverse
+                            return;
                         }
                     }
                 }
