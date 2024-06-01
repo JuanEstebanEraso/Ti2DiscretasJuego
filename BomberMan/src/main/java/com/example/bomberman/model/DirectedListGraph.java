@@ -109,6 +109,40 @@ public class DirectedListGraph<T> implements IGraph<T> {
         }
     }
 
+    public List<Vertex<T>> bfsPath(Vertex<T> start, Vertex<T> destination) {
+        Map<Vertex<T>, Vertex<T>> parentMap = new HashMap<>();
+        Queue<Vertex<T>> queue = new LinkedList<>();
+        List<Vertex<T>> path = new ArrayList<>();
+        Set<Vertex<T>> visited = new HashSet<>();
+
+        queue.add(start);
+        visited.add(start);
+
+        while (!queue.isEmpty()) {
+            Vertex<T> current = queue.poll();
+            if (current.equals(destination)) {
+                // Reconstruir el camino desde el inicio hasta el destino
+                Vertex<T> node = destination;
+                while (node != null) {
+                    path.add(node);
+                    node = parentMap.get(node);
+                }
+                Collections.reverse(path);
+                return path;
+            }
+            for (Edge<T> edge : adjacencyList.get(current)) {
+                Vertex<T> neighbor = edge.getDestinationVertex();
+                if (!visited.contains(neighbor) && adjacencyList.get(current).contains(edge)) {
+                    queue.add(neighbor);
+                    visited.add(neighbor);
+                    parentMap.put(neighbor, current);
+                }
+            }
+        }
+        // No se encontró un camino al destino
+        return null;
+    }
+
     public void dfs(){
         for (Vertex<T> u : this.auxiliarList) {
             u.setColor(Color.WHITE);
