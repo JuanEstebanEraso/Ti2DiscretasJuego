@@ -1,8 +1,8 @@
 package com.example.bomberman.model;
 import java.util.*;
-public class MatrizDirigido<V>{
+public class MatrizDirigido<T> {
 
-    private ArrayList<V> vertices;
+    private ArrayList<T> vertices;
     private int[][] adjacencyMatrix;
 
     public MatrizDirigido(int numVertices) {
@@ -13,57 +13,64 @@ public class MatrizDirigido<V>{
             adjacencyMatrix[i][i] = 0;
         }
     }
-    public void addVertex(V vertex) {
+
+    public void addVertex(T vertex) {
+        if (vertices.contains(vertex)) {
+            throw new IllegalArgumentException("Vertex already exists in the graph.");
+        }
         vertices.add(vertex);
     }
 
-    public void addEdge(V source, V destination,int weight) {
+    public void addEdge(T source, T destination) {
+        addEdge(source, destination, 1);
+    }
+
+    public void addEdge(T source, T destination, int weight) {
         int sourceIndex = vertices.indexOf(source);
         int destinationIndex = vertices.indexOf(destination);
         if (sourceIndex == -1 || destinationIndex == -1) {
-            throw new IllegalArgumentException("Attempt to add a connection between two vertices, one of them doesn't exist in the graph.\n" +
-                    "Source vertex: " + source + "\n" +
-                    "Destination vertex: " + destination + "\n" +
-                    "One of the vertices does not exist inside the graph.");
+            throw new IllegalArgumentException("One or both vertices do not exist in the graph.");
         }
-
-        adjacencyMatrix[sourceIndex][destinationIndex] = 1;
+        adjacencyMatrix[sourceIndex][destinationIndex] = weight;
     }
 
-    public ArrayList<V> getVertices() {
+    public boolean hasEdge(T source, T destination) {
+        int sourceIndex = vertices.indexOf(source);
+        int destinationIndex = vertices.indexOf(destination);
+        if (sourceIndex == -1 || destinationIndex == -1) {
+            throw new IllegalArgumentException("One or both vertices do not exist in the graph.");
+        }
+        return adjacencyMatrix[sourceIndex][destinationIndex] != Integer.MAX_VALUE / 2;
+    }
+
+    public int getEdgeWeight(T source, T destination) {
+        int sourceIndex = vertices.indexOf(source);
+        int destinationIndex = vertices.indexOf(destination);
+        if (sourceIndex == -1 || destinationIndex == -1) {
+            throw new IllegalArgumentException("One or both vertices do not exist in the graph.");
+        }
+        return adjacencyMatrix[sourceIndex][destinationIndex];
+    }
+
+    public ArrayList<T> getVertices() {
         return vertices;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder("Vertices: " + vertices + "\n");
-        result.append("Adjacency Matrix:\n");
-        for (int[] row : adjacencyMatrix) {
-            for (int value : row) {
-                result.append(value).append("\t");
-            }
-            result.append("\n");
-        }
-        return result.toString();
-    }
+    public ArrayList<Integer> bfs(T start) {
+        ArrayList<Integer> result = new ArrayList<>();
+        Set<T> visited = new HashSet<>();
+        Queue<T> queue = new LinkedList<>();
 
-    public List<V> bfs(V start) {
-        List<V> result = new ArrayList<>();
-        Set<V> visited = new HashSet<>();
-        Queue<V> queue = new LinkedList<>();
-
-        int startIndex = vertices.indexOf(start);
         queue.add(start);
         visited.add(start);
 
         while (!queue.isEmpty()) {
-            V current = queue.poll();
-            result.add(current);
+            T current = queue.poll();
+            result.add(vertices.indexOf(current));
 
             int currentIndex = vertices.indexOf(current);
-
             for (int i = 0; i < vertices.size(); i++) {
-                if (adjacencyMatrix[currentIndex][i] == 1 && !visited.contains(vertices.get(i))) {
+                if (adjacencyMatrix[currentIndex][i] != Integer.MAX_VALUE / 2 && !visited.contains(vertices.get(i))) {
                     queue.add(vertices.get(i));
                     visited.add(vertices.get(i));
                 }
@@ -73,39 +80,6 @@ public class MatrizDirigido<V>{
         return result;
     }
 
-
-    public List<V> dfs(V start) {
-        List<V> result = new ArrayList<>();
-        Set<V> visited = new HashSet<>();
-
-        int startIndex = vertices.indexOf(start);
-        visited.add(vertices.get(startIndex));
-        result.add(vertices.get(startIndex));
-
-        Stack<Integer> stack = new Stack<>();
-        stack.push(startIndex);
-
-        while (!stack.isEmpty()) {
-            int currentIndex = stack.pop();
-            for (int i = 0; i < vertices.size(); i++) {
-                if (adjacencyMatrix[currentIndex][i] == 1 && !visited.contains(vertices.get(i))) {
-                    visited.add(vertices.get(i));
-                    result.add(vertices.get(i));
-                    stack.push(i);
-                }
-            }
-        }
-
-        return result;
-    }
-    public boolean hasEdge(V source, V destination) {
-        int sourceIndex = vertices.indexOf(source);
-        int destinationIndex = vertices.indexOf(destination);
-        if (sourceIndex == -1 || destinationIndex == -1) {
-            throw new IllegalArgumentException("Uno o ambos vértices no existen en el grafo.");
-        }
-        return adjacencyMatrix[sourceIndex][destinationIndex] == 1;
-    }
     public ArrayList<ArrayList<Integer>> floydWarshallM() {
         int size = vertices.size();
         ArrayList<ArrayList<Integer>> dist = new ArrayList<>();
@@ -129,46 +103,5 @@ public class MatrizDirigido<V>{
         }
 
         return dist;
-    }
-
-    public ArrayList<Integer> dijkstraM(V sourceVertex) {
-        int size = vertices.size();
-        int[] distance = new int[size];
-        boolean[] visited = new boolean[size];
-        Arrays.fill(distance, Integer.MAX_VALUE / 2);
-        Arrays.fill(visited, false);
-
-        int sourceIndex = vertices.indexOf(sourceVertex);
-        if (sourceIndex == -1) {
-            throw new IllegalArgumentException("El vértice fuente no existe en el grafo.");
-        }
-        distance[sourceIndex] = 0;
-
-        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(i -> distance[i]));
-        priorityQueue.add(sourceIndex);
-
-        while (!priorityQueue.isEmpty()) {
-            int currentIndex = priorityQueue.poll();
-
-            if (visited[currentIndex]) continue;
-            visited[currentIndex] = true;
-
-            for (int i = 0; i < size; i++) {
-                if (adjacencyMatrix[currentIndex][i] != Integer.MAX_VALUE / 2) {
-                    int newDistance = distance[currentIndex] + adjacencyMatrix[currentIndex][i];
-                    if (newDistance < distance[i]) {
-                        distance[i] = newDistance;
-                        priorityQueue.add(i);
-                    }
-                }
-            }
-        }
-
-        ArrayList<Integer> distances = new ArrayList<>();
-        for (int dist : distance) {
-            distances.add(dist);
-        }
-
-        return distances;
     }
 }

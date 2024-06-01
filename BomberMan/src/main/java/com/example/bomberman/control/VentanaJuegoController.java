@@ -25,19 +25,19 @@ import java.util.Random;
 public class VentanaJuegoController {
 
     @FXML
-    private Canvas canvas;
+    public Canvas canvas;
     @FXML
-    private Label labelGasolina;
-    private DirectedListGraph<Integer> graph;
-    private Vertex<Integer> characterPosition;
-    private Enemy enemy;
-    private int[][] distances;
-    private int[][] next;
-    private Image backgroundImage;
-    private Image playerImage;
-    private Image enemyImage;
-    private int playerEnergy = 100;
-    private Vertex<Integer> victoryVertex;
+    public Label labelGasolina;
+    public DirectedListGraph<Integer> graph;
+    public Vertex<Integer> characterPosition;
+    public Enemy enemy;
+    public int[][] distances;
+    public int[][] next;
+    public Image backgroundImage;
+    public Image playerImage;
+    public Image enemyImage;
+    public int playerEnergy = 100;
+    public Vertex<Integer> victoryVertex;
 
     @FXML
     public void initialize() {

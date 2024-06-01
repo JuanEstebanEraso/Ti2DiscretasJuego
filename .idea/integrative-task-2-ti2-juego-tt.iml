@@ -2,8 +2,14 @@
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/GraphImplementationsTests/GraphImplementations/src/test" isTestSource="true" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.9.2" level="project" />
+    <orderEntry type="module" module-name="BomberMan" scope="TEST" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.openjfx:javafx-graphics:win:19.0.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.openjfx:javafx-controls:win:19.0.2" level="project" />
   </component>
 </module>

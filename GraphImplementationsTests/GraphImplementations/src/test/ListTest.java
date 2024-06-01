@@ -1,13 +1,9 @@
-package test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import model.DirectedListGraph;
-import model.Vertex;
+import  com.example.bomberman.model.DirectedListGraph;
+import com.example.bomberman.model.Vertex;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 public class ListTest {
 
@@ -109,11 +105,35 @@ public class ListTest {
     }
 
 
-
-
-
     @Test
     public void testFloydWarshall() {
+        setUp1();
+        graph.addEdge(0, 1, 3);
+        graph.addEdge(0, 3, 7);
+        graph.addEdge(1, 2, 1);
+        graph.addEdge(2, 0, 2);
+        graph.addEdge(2, 3, 2);
+        graph.addEdge(3, 4, 1);
 
+        int[][] expected = {
+                {0, Integer.MAX_VALUE/2, Integer.MAX_VALUE/2, Integer.MAX_VALUE/2, Integer.MAX_VALUE/2},
+                {4, 0, 1, 3, 3},
+                {3, 5, 0, 2, 2},
+                {1, Integer.MAX_VALUE/2, Integer.MAX_VALUE/2, 0, Integer.MAX_VALUE/2},
+                {7, 3, 4, 6, 0}
+        };
+
+        int[][] result = graph.floydWarshall();
+        /*for (int i = 0; i < result.length; i++) {
+            for (int j = 0; j < result[i].length; j++) {
+                System.out.print(result[i][j]+" ");
+            }
+            System.out.println();
+        }*/
+        for (int i = 0; i < expected.length; i++) {
+            assertArrayEquals(expected[i], result[i]);
+        }
     }
+
+
 }
